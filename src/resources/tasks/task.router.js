@@ -1,5 +1,7 @@
+const { StatusCodes } = require('http-status-codes');
 const router = require('express').Router({ mergeParams: true });
 const Task = require('./task.model');
+
 const tasksService = require('./task.service');
 const catchErrors = require('../../common/catchErrors');
 
@@ -27,9 +29,11 @@ router.route('/').post(
     });
 
     if (task) {
-      res.status(201).send(Task.toResponse(task));
+      res.status(StatusCodes.CREATED).json(Task.toResponse(task));
     } else {
-      res.status(400).send({ error: 'Bad request' });
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ code: 'BAD_REQUEST', msg: 'Bad request' });
     }
   })
 );
@@ -43,7 +47,9 @@ router.route('/:id').get(
     if (task) {
       res.json(Task.toResponse(task));
     } else {
-      res.status(404).send('Task not found');
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ code: 'TASK_NOT_FOUND', msg: 'Task not found' });
     }
   })
 );
@@ -64,9 +70,11 @@ router.route('/:id').put(
     });
 
     if (task) {
-      res.status(200).send(Task.toResponse(task));
+      res.status(StatusCodes.OK).json(Task.toResponse(task));
     } else {
-      res.status(404).send('Task not found');
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ code: 'TASK_NOT_FOUND', msg: 'Task not found' });
     }
   })
 );
@@ -78,9 +86,13 @@ router.route('/:id').delete(
     const task = await tasksService.deleteById(id);
 
     if (task) {
-      res.status(204).send('The task has been deleted');
+      res
+        .status(StatusCodes.NO_CONTENT)
+        .json({ code: 'TASK_DELETED', msg: 'The task has been deleted' });
     } else {
-      res.status(404).send('Task not found');
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ code: 'TASK_NOT_FOUND', msg: 'Task not found' });
     }
   })
 );

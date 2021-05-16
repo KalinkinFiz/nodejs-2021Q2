@@ -1,5 +1,7 @@
+const { StatusCodes } = require('http-status-codes');
 const router = require('express').Router();
 const Board = require('./board.model');
+
 const boardsService = require('./board.service');
 const catchErrors = require('../../common/catchErrors');
 
@@ -18,9 +20,11 @@ router.route('/').post(
     const board = await boardsService.createBoard({ id, title, columns });
 
     if (board) {
-      res.status(201).send(Board.toResponse(board));
+      res.status(StatusCodes.CREATED).json(Board.toResponse(board));
     } else {
-      res.status(400).send({ error: 'Bad request' });
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ code: 'BOARD_NOT_CREATE', msg: 'Board not create' });
     }
   })
 );
@@ -34,7 +38,9 @@ router.route('/:id').get(
     if (board) {
       res.json(Board.toResponse(board));
     } else {
-      res.status(404).send('Board not found');
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ code: 'BOARD_NOT_FOUND', msg: 'Board not found' });
     }
   })
 );
@@ -47,9 +53,11 @@ router.route('/:id').put(
     const board = await boardsService.updateById({ id, title, columns });
 
     if (board) {
-      res.status(200).send(Board.toResponse(board));
+      res.status(StatusCodes.OK).json(Board.toResponse(board));
     } else {
-      res.status(404).send('Board not found');
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ code: 'BOARD_NOT_FOUND', msg: 'Board not found' });
     }
   })
 );
@@ -61,9 +69,13 @@ router.route('/:id').delete(
     const board = await boardsService.deleteById(id);
 
     if (board) {
-      res.status(204).send('The board has been deleted');
+      res
+        .status(StatusCodes.NO_CONTENT)
+        .json({ code: 'BOARD_DELETED', msg: 'The board has been deleted' });
     } else {
-      res.status(404).send('Board not found');
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ code: 'BOARD_NOT_FOUND', msg: 'Board not found' });
     }
   })
 );

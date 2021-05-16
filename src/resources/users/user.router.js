@@ -1,5 +1,7 @@
+const { StatusCodes } = require('http-status-codes');
 const router = require('express').Router();
 const User = require('./user.model');
+
 const usersService = require('./user.service');
 const catchErrors = require('../../common/catchErrors');
 
@@ -18,9 +20,11 @@ router.route('/').post(
     const user = await usersService.createUser({ name, login, password });
 
     if (user) {
-      res.status(201).send(User.toResponse(user));
+      res.status(StatusCodes.CREATED).json(User.toResponse(user));
     } else {
-      res.status(404).send('User not create');
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ code: 'USER_NOT_CREATE', msg: 'User not create' });
     }
   })
 );
@@ -34,7 +38,9 @@ router.route('/:id').get(
     if (user) {
       res.json(User.toResponse(user));
     } else {
-      res.status(404).send('User not found');
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ code: 'USER_NOT_FOUND', msg: 'User not found' });
     }
   })
 );
@@ -47,9 +53,11 @@ router.route('/:id').put(
     const user = await usersService.updateById({ id, name, login, password });
 
     if (user) {
-      res.status(200).send(User.toResponse(user));
+      res.status(StatusCodes.OK).json(User.toResponse(user));
     } else {
-      res.status(404).send('User not found');
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ code: 'USER_NOT_FOUND', msg: 'User not found' });
     }
   })
 );
@@ -61,9 +69,13 @@ router.route('/:id').delete(
     const user = await usersService.deleteById(id);
 
     if (user) {
-      res.status(204).send('The user has been deleted');
+      res
+        .status(StatusCodes.NO_CONTENT)
+        .json({ code: 'USER_DELETED', msg: 'The user has been deleted' });
     } else {
-      res.status(404).send('User not found');
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ code: 'USER_NOT_FOUND', msg: 'User not found' });
     }
   })
 );
