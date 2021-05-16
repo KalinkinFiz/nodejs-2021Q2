@@ -68,11 +68,11 @@ router.route('/:id').delete(
 
     const board = await boardsService.deleteById(id);
 
-    if (board) {
-      res
-        .status(StatusCodes.NO_CONTENT)
-        .json({ code: 'BOARD_DELETED', msg: 'The board has been deleted' });
-    } else {
+    res
+      .status(StatusCodes.NO_CONTENT)
+      .json({ code: 'BOARD_DELETED', msg: 'The board has been deleted' });
+
+    if (!board) {
       res
         .status(StatusCodes.NOT_FOUND)
         .json({ code: 'BOARD_NOT_FOUND', msg: 'Board not found' });
