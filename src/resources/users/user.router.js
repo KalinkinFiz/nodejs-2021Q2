@@ -44,7 +44,7 @@ router.route('/:id').put(
     const { id } = req.params;
     const { name, login, password } = req.body;
 
-    const user = await usersService.updateUserId({ id, name, login, password });
+    const user = await usersService.updateById({ id, name, login, password });
 
     if (user) {
       res.status(200).send(User.toResponse(user));
@@ -58,7 +58,7 @@ router.route('/:id').delete(
   catchErrors(async (req, res) => {
     const { id } = req.params;
 
-    const user = await usersService.deleteUserId(id);
+    const user = await usersService.deleteById(id);
 
     if (user) {
       res.status(204).send('The user has been deleted');
