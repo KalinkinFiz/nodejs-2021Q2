@@ -67,6 +67,20 @@ const updateById = async ({
   return newBoard;
 };
 
+const removeUserById = async (id) => {
+  const userTasks = Tasks.filter((task) => task.userId === id);
+
+  await Promise.allSettled(
+    userTasks.map(async (task) => updateById({ id: task.id, userId: null }))
+  );
+};
+
+const deleteByBoardId = async (boardId) => {
+  const boardTasks = Tasks.filter((task) => task.boardId === boardId);
+
+  await Promise.allSettled(boardTasks.map(async (task) => deleteById(task.id)));
+};
+
 module.exports = {
   Tasks,
   getAll,
@@ -74,4 +88,6 @@ module.exports = {
   createTask,
   deleteById,
   updateById,
+  removeUserById,
+  deleteByBoardId,
 };
