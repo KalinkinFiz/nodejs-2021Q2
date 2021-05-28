@@ -1,42 +1,42 @@
 const Board = require('./board.model');
 
-const Boards = [new Board()];
+const BOARDS = [new Board()];
 
-const getAll = async () => Boards;
+const getAll = async () => BOARDS;
 
-const getById = async (id) => Boards.find((board) => board.id === id);
+const getById = async (id) => BOARDS.find((board) => board.id === id);
 
 const createBoard = async ({ id, title, columns }) => {
   const board = new Board({ id, title, columns });
-  Boards.push(board);
+  BOARDS.push(board);
   return board;
 };
 
 const deleteById = async (id) => {
-  const boardPosition = Boards.findIndex((board) => board.id === id);
+  const boardPosition = BOARDS.findIndex((board) => board.id === id);
 
   if (boardPosition === -1) return null;
 
-  const boardDeletable = Boards[boardPosition];
+  const boardDeletable = BOARDS[boardPosition];
 
-  Boards.splice(boardPosition, 1);
+  BOARDS.splice(boardPosition, 1);
   return boardDeletable;
 };
 
 const updateById = async ({ id, title, columns }) => {
-  const boardPosition = Boards.findIndex((board) => board.id === id);
+  const boardPosition = BOARDS.findIndex((board) => board.id === id);
 
   if (boardPosition === -1) return null;
 
-  const oldBoard = Boards[boardPosition];
+  const oldBoard = BOARDS[boardPosition];
   const newBoard = { ...oldBoard, title, columns };
 
-  Boards.splice(boardPosition, 1, newBoard);
+  BOARDS.splice(boardPosition, 1, newBoard);
   return newBoard;
 };
 
 module.exports = {
-  Boards,
+  BOARDS,
   getAll,
   getById,
   createBoard,
