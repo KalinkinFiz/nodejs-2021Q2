@@ -1,5 +1,5 @@
 /**
- * @file   This file defines a board class
+ * @file   This file defines a board model
  * @author KalinkinFiz
  * @since  1.0.0
  *
@@ -19,9 +19,10 @@ class Board {
     this.title = title;
     this.columns = columns;
   }
+
   /**
    * Return static data for board
-   * @param {TBoard} board
+   * @param {TBoard} board passing the board object
    * @returns {TBoard} - Board parameters
    */
   static toResponse(board) {

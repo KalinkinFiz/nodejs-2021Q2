@@ -1,5 +1,5 @@
 /**
- * @file   This file defines a board class
+ * @file   This file defines a board service
  * @author KalinkinFiz
  * @since  1.0.0
  *

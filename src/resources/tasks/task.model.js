@@ -1,9 +1,22 @@
+/**
+ * @file   This file defines a task model
+ * @author KalinkinFiz
+ * @since  1.0.0
+ *
+ * @namespace Tasks
+ */
+
 const { v4: uuid } = require('uuid');
 
+/** Class representing a Task model */
 class Task {
+  /**
+   * Creates a task instance
+   * @param {TTask} task - task Object
+   */
   constructor({
     id = uuid(),
-    title = 'BOARD',
+    title = 'TASK',
     order = 0,
     description = 'description',
     boardId = null,
@@ -19,6 +32,11 @@ class Task {
     this.columnId = columnId;
   }
 
+  /**
+   * Return static data for task
+   * @param {TTask} task passing the task object
+   * @returns {TTask} - Task parameters
+   */
   static toResponse(task) {
     const { id, title, order, description, userId, boardId, columnId } = task;
     return { id, title, order, description, userId, boardId, columnId };

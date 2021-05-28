@@ -28,7 +28,7 @@ class User {
 
   /**
    * Return static data for user
-   * @param {TUserModel} user
+   * @param {TUserModel} user passing the user object
    * @returns {TUserResponse} User parameters
    */
 
