@@ -1,44 +1,44 @@
 const User = require('./user.model');
 
-const Users = [
+const USERS = [
   new User({ name: 'maxim', login: 'maxim', password: '12345qwerty' }),
 ];
 
-const getAll = async () => Users;
+const getAll = async () => USERS;
 
-const getById = async (id) => Users.find((user) => user.id === id);
+const getById = async (id) => USERS.find((user) => user.id === id);
 
 const createUser = async ({ name, login, password }) => {
   const user = new User({ name, login, password });
-  Users.push(user);
+  USERS.push(user);
   return user;
 };
 
 const deleteById = async (id) => {
-  const userPosition = Users.findIndex((user) => user.id === id);
+  const userPosition = USERS.findIndex((user) => user.id === id);
 
   if (userPosition === -1) return null;
 
-  const userDeletable = Users[userPosition];
+  const userDeletable = USERS[userPosition];
 
-  Users.splice(userPosition, 1);
+  USERS.splice(userPosition, 1);
   return userDeletable;
 };
 
 const updateById = async ({ id, name, login, password }) => {
-  const userPosition = Users.findIndex((user) => user.id === id);
+  const userPosition = USERS.findIndex((user) => user.id === id);
 
   if (userPosition === -1) return null;
 
-  const oldUser = Users[userPosition];
+  const oldUser = USERS[userPosition];
   const newUser = { ...oldUser, name, login, password };
 
-  Users.splice(userPosition, 1, newUser);
+  USERS.splice(userPosition, 1, newUser);
   return newUser;
 };
 
 module.exports = {
-  Users,
+  USERS,
   getAll,
   getById,
   createUser,
