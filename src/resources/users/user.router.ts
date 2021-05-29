@@ -1,20 +1,23 @@
-const { StatusCodes } = require('http-status-codes');
-const router = require('express').Router();
-const User = require('./user.model');
+import { Request, Response, Router } from 'express';
+import { StatusCodes } from 'http-status-codes';
 
-const usersService = require('./user.service');
-const catchErrors = require('../../common/catchErrors');
+import User from './user.model';
+
+import usersService from './user.service';
+import catchErrors from '../../common/catchErrors';
+
+const router = Router();
 
 router.route('/').get(
-  catchErrors(async (req, res) => {
+  catchErrors(async (_req: Request, res: Response) => {
     const users = await usersService.getAll();
 
     res.json(users.map(User.toResponse));
-  })
+  }),
 );
 
 router.route('/').post(
-  catchErrors(async (req, res) => {
+  catchErrors(async (req: Request, res: Response) => {
     const { name, login, password } = req.body;
 
     const user = await usersService.createUser({ name, login, password });
@@ -26,12 +29,12 @@ router.route('/').post(
         .status(StatusCodes.BAD_REQUEST)
         .json({ code: 'USER_NOT_CREATE', msg: 'User not create' });
     }
-  })
+  }),
 );
 
 router.route('/:id').get(
-  catchErrors(async (req, res) => {
-    const { id } = req.params;
+  catchErrors(async (req: Request, res: Response) => {
+    const id = `${req.params['id']}`;
 
     const user = await usersService.getById(id);
 
@@ -42,12 +45,12 @@ router.route('/:id').get(
         .status(StatusCodes.NOT_FOUND)
         .json({ code: 'USER_NOT_FOUND', msg: 'User not found' });
     }
-  })
+  }),
 );
 
 router.route('/:id').put(
-  catchErrors(async (req, res) => {
-    const { id } = req.params;
+  catchErrors(async (req: Request, res: Response) => {
+    const id = `${req.params['id']}`;
     const { name, login, password } = req.body;
 
     const user = await usersService.updateById({ id, name, login, password });
@@ -59,12 +62,12 @@ router.route('/:id').put(
         .status(StatusCodes.NOT_FOUND)
         .json({ code: 'USER_NOT_FOUND', msg: 'User not found' });
     }
-  })
+  }),
 );
 
 router.route('/:id').delete(
-  catchErrors(async (req, res) => {
-    const { id } = req.params;
+  catchErrors(async (req: Request, res: Response) => {
+    const id = `${req.params['id']}`;
 
     const user = await usersService.deleteById(id);
 
@@ -77,7 +80,7 @@ router.route('/:id').delete(
     return res
       .status(StatusCodes.NO_CONTENT)
       .json({ code: 'USER_DELETED', msg: 'The user has been deleted' });
-  })
+  }),
 );
 
-module.exports = router;
+export default router;

@@ -6,7 +6,9 @@
  * @namespace Users
  */
 
-const { v4: uuid } = require('uuid');
+import { v4 as uuid } from 'uuid';
+
+import { TUserModel, TUserResponse } from './user.type';
 
 /** Class representing a User model */
 class User {
@@ -14,6 +16,14 @@ class User {
    * Creates a user instance
    * @param {TUserModel} user - user Object
    */
+  id: TUserModel['id'];
+
+  name: TUserModel['name'];
+
+  login: TUserModel['login'];
+
+  password: TUserModel['password'];
+
   constructor({
     id = uuid(),
     name = 'USER',
@@ -32,10 +42,10 @@ class User {
    * @returns {TUserResponse} User parameters
    */
 
-  static toResponse(user) {
+  static toResponse(user: TUserModel): TUserResponse {
     const { id, name, login } = user;
     return { id, name, login };
   }
 }
 
-module.exports = User;
+export default User;
