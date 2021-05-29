@@ -17,8 +17,11 @@ class User {
    * @param {TUserModel} user - user Object
    */
   id: string;
+
   name: string;
+
   login: string;
+
   password: string;
 
   constructor({
