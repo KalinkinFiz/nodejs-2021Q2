@@ -21,16 +21,14 @@ const getAll = async (): Promise<TUserModel[]> => usersRepo.getAll();
  * @param {string} id - id user
  * @returns {Promise<?TUserModel>} - return user object or null
  */
-const getById = async (id: string): Promise<TUserModel | null> =>
-  usersRepo.getById(id);
+const getById = async (id: string): Promise<TUserModel | null> => usersRepo.getById(id);
 
 /**
  * Create users
  * @param {TUser} user - new user parameters
  * @returns {Promise<TUserModel>} - return new user object
  */
-const createUser = async (user: TUser): Promise<TUserModel> =>
-  usersRepo.createUser(user);
+const createUser = async (user: TUser): Promise<TUserModel> => usersRepo.createUser(user);
 
 /**
  * Delete user; Removing users tasks

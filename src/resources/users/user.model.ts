@@ -16,13 +16,10 @@ class User {
    * Creates a user instance
    * @param {TUserModel} user - user Object
    */
-  id: TUserModel['id'];
-
-  name: TUserModel['name'];
-
-  login: TUserModel['login'];
-
-  password: TUserModel['password'];
+  id: string;
+  name: string;
+  login: string;
+  password: string;
 
   constructor({
     id = uuid(),

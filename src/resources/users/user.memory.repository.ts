@@ -8,11 +8,7 @@ const getAll = async (): Promise<TUserModel[]> => USERS;
 const getById = async (id: string): Promise<TUserModel | null> =>
   USERS.find((user) => user.id === id) || null;
 
-const createUser = async ({
-  name,
-  login,
-  password,
-}: TUser): Promise<TUserModel> => {
+const createUser = async ({ name, login, password }: TUser): Promise<TUserModel> => {
   const user = new User({ name, login, password });
   USERS.push(user);
   return user;

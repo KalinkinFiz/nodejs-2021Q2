@@ -25,9 +25,7 @@ router.route('/').post(
     if (user) {
       res.status(StatusCodes.CREATED).json(User.toResponse(user));
     } else {
-      res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ code: 'USER_NOT_CREATE', msg: 'User not create' });
+      res.status(StatusCodes.BAD_REQUEST).json({ code: 'USER_NOT_CREATE', msg: 'User not create' });
     }
   }),
 );
@@ -41,9 +39,7 @@ router.route('/:id').get(
     if (user) {
       res.json(User.toResponse(user));
     } else {
-      res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ code: 'USER_NOT_FOUND', msg: 'User not found' });
+      res.status(StatusCodes.NOT_FOUND).json({ code: 'USER_NOT_FOUND', msg: 'User not found' });
     }
   }),
 );
@@ -58,9 +54,7 @@ router.route('/:id').put(
     if (user) {
       res.status(StatusCodes.OK).json(User.toResponse(user));
     } else {
-      res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ code: 'USER_NOT_FOUND', msg: 'User not found' });
+      res.status(StatusCodes.NOT_FOUND).json({ code: 'USER_NOT_FOUND', msg: 'User not found' });
     }
   }),
 );
