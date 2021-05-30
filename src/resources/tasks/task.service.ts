@@ -16,7 +16,7 @@ const getAll = async () => tasksRepo.getAll();
 
 /**
  * Task return by id
- * @param {string} id - id task
+ * @param id - id task
  * @returns {Promise<?TTask>} - return task object or null
  */
 const getById = async (id) => tasksRepo.getById(id);
@@ -26,15 +26,7 @@ const getById = async (id) => tasksRepo.getById(id);
  * @param {TTask} task - new task parameters
  * @returns {Promise<TTask>} - return new task object
  */
-const createTask = async ({
-  id,
-  title,
-  order,
-  description,
-  userId,
-  boardId,
-  columnId,
-}) =>
+const createTask = async ({ id, title, order, description, userId, boardId, columnId }) =>
   tasksRepo.createTask({
     id,
     title,
@@ -47,7 +39,7 @@ const createTask = async ({
 
 /**
  * Delete task
- * @param {string} id - task id
+ * @param id - task id
  * @returns {Promise<?TTask>} - return task object or null
  */
 const deleteById = async (id) => tasksRepo.deleteById(id);
@@ -57,15 +49,7 @@ const deleteById = async (id) => tasksRepo.deleteById(id);
  * @param {TTask} newBoard - params for task update
  * @returns {Promise<?TTask>} - return task object or null
  */
-const updateById = async ({
-  id,
-  title,
-  order,
-  description,
-  userId,
-  boardId,
-  columnId,
-}) =>
+const updateById = async ({ id, title, order, description, userId, boardId, columnId }) =>
   tasksRepo.updateById({
     id,
     title,

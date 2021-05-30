@@ -18,7 +18,7 @@ const getAll = async (): Promise<TBoardModel[]> => boardsRepo.getAll();
 
 /**
  * Board return by id
- * @param {string} id - id board
+ * @param id - id board
  * @returns {Promise<?TBoardModel>} - return board object or null
  */
 const getById = async (id: string): Promise<TBoardModel | null> => boardsRepo.getById(id);
@@ -33,7 +33,7 @@ const createBoard = async ({ title, columns }: TBoard): Promise<TBoardModel> =>
 
 /**
  * Delete board; Removing taskboards
- * @param {string} id - board id
+ * @param id - board id
  * @returns {Promise<?TBoardModel>} - return board object or null
  */
 const deleteById = async (id: string): Promise<TBoardModel | null> => {

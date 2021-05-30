@@ -10,7 +10,7 @@ router.route('/').get(
     const tasks = await tasksService.getAll();
 
     res.json(tasks.map(Task.toResponse));
-  })
+  }),
 );
 
 router.route('/').post(
@@ -35,7 +35,7 @@ router.route('/').post(
         .status(StatusCodes.BAD_REQUEST)
         .json({ code: 'BAD_REQUEST', msg: 'Bad request' });
     }
-  })
+  }),
 );
 
 router.route('/:id').get(
@@ -51,7 +51,7 @@ router.route('/:id').get(
         .status(StatusCodes.NOT_FOUND)
         .json({ code: 'TASK_NOT_FOUND', msg: 'Task not found' });
     }
-  })
+  }),
 );
 
 router.route('/:id').put(
@@ -76,7 +76,7 @@ router.route('/:id').put(
         .status(StatusCodes.NOT_FOUND)
         .json({ code: 'TASK_NOT_FOUND', msg: 'Task not found' });
     }
-  })
+  }),
 );
 
 router.route('/:id').delete(
@@ -94,7 +94,7 @@ router.route('/:id').delete(
         .status(StatusCodes.NOT_FOUND)
         .json({ code: 'TASK_NOT_FOUND', msg: 'Task not found' });
     }
-  })
+  }),
 );
 
 module.exports = router;

@@ -1,5 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import { Request, Response, Router } from 'express';
+
 import Board from './board.model';
 import { TBoard } from './board.type';
 

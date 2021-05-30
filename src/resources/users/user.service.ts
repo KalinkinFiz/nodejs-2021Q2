@@ -18,7 +18,7 @@ const getAll = async (): Promise<TUserModel[]> => usersRepo.getAll();
 
 /**
  * User return by id
- * @param {string} id - id user
+ * @param id - id user
  * @returns {Promise<?TUserModel>} - return user object or null
  */
 const getById = async (id: string): Promise<TUserModel | null> => usersRepo.getById(id);
@@ -32,7 +32,7 @@ const createUser = async (user: TUser): Promise<TUserModel> => usersRepo.createU
 
 /**
  * Delete user; Removing users tasks
- * @param {string} id - user id
+ * @param id - user id
  * @returns {Promise<?TUserModel>} - return user object or null
  */
 const deleteById = async (id: string): Promise<TUserModel | null> => {

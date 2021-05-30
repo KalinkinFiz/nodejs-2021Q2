@@ -71,7 +71,7 @@ const removeUserById = async (id) => {
   const userTask = TASKS.filter((task) => task.userId === id);
 
   await Promise.allSettled(
-    userTask.map(async (task) => updateById({ id: task.id, userId: null }))
+    userTask.map(async (task) => updateById({ id: task.id, userId: null })),
   );
 };
 
