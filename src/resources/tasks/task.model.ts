@@ -6,7 +6,9 @@
  * @namespace Tasks
  */
 
-const { v4: uuid } = require('uuid');
+import { v4 as uuid } from 'uuid';
+
+import { TTaskModel, TTask } from './task.type';
 
 /** Class representing a Task model */
 class Task {
@@ -14,16 +16,29 @@ class Task {
    * Creates a task instance
    * @param {TTask} task - task Object
    */
+  id: string;
+
+  title: string;
+
+  order: number;
+
+  description: string;
+
+  boardId: string | null;
+
+  userId: string | null;
+
+  columnId: string | null;
+
   constructor({
-    id = uuid(),
     title = 'TASK',
     order = 0,
     description = 'description',
     boardId = null,
     userId = null,
     columnId = null,
-  } = {}) {
-    this.id = id;
+  }: Partial<TTask> = {}) {
+    this.id = uuid();
     this.title = title;
     this.order = order;
     this.description = description;
@@ -37,10 +52,10 @@ class Task {
    * @param {TTask} task passing the task object
    * @returns {TTask} - Task parameters
    */
-  static toResponse(task) {
+  static toResponse(task: TTaskModel): TTaskModel {
     const { id, title, order, description, userId, boardId, columnId } = task;
     return { id, title, order, description, userId, boardId, columnId };
   }
 }
 
-module.exports = Task;
+export default Task;

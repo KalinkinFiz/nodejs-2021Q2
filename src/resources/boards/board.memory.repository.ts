@@ -19,10 +19,10 @@ const deleteById = async (id: string): Promise<TBoardModel | null> => {
 
   if (boardPosition === -1) return null;
 
-  const boardDeletable = BOARDS[boardPosition];
+  const boardDeletable = BOARDS[boardPosition]!;
 
   BOARDS.splice(boardPosition, 1);
-  return boardDeletable!;
+  return boardDeletable;
 };
 
 const updateById = async ({ id, title, columns }: TBoardModel): Promise<TBoardModel | null> => {

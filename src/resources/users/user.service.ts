@@ -7,7 +7,7 @@
  */
 
 import usersRepo from './user.memory.repository';
-// import tasksRepo from '../tasks/task.memory.repository';
+import tasksRepo from '../tasks/task.memory.repository';
 import { TUserModel, TUser } from './user.type';
 
 /**
@@ -38,7 +38,7 @@ const createUser = async (user: TUser): Promise<TUserModel> => usersRepo.createU
 const deleteById = async (id: string): Promise<TUserModel | null> => {
   const userDeletable = await getById(id);
   usersRepo.deleteById(id);
-  // tasksRepo.removeUserById(id);
+  tasksRepo.removeUserById(id);
 
   return userDeletable;
 };

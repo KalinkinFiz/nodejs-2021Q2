@@ -6,29 +6,36 @@
  * @namespace Tasks
  */
 
-const tasksRepo = require('./task.memory.repository');
+import tasksRepo from './task.memory.repository';
+import { TTask, TTaskModel } from './task.type';
 
 /**
  * Get all tasks
  * @returns {Promise<TTask[]>} - array of tasks
  */
-const getAll = async () => tasksRepo.getAll();
+const getAll = async (): Promise<TTaskModel[]> => tasksRepo.getAll();
 
 /**
  * Task return by id
  * @param id - id task
  * @returns {Promise<?TTask>} - return task object or null
  */
-const getById = async (id) => tasksRepo.getById(id);
+const getById = async (id: string): Promise<TTaskModel | null> => tasksRepo.getById(id);
 
 /**
  * Create tasks
  * @param {TTask} task - new task parameters
  * @returns {Promise<TTask>} - return new task object
  */
-const createTask = async ({ id, title, order, description, userId, boardId, columnId }) =>
+const createTask = async ({
+  title,
+  order,
+  description,
+  userId,
+  boardId,
+  columnId,
+}: TTask): Promise<TTaskModel> =>
   tasksRepo.createTask({
-    id,
     title,
     order,
     description,
@@ -42,22 +49,14 @@ const createTask = async ({ id, title, order, description, userId, boardId, colu
  * @param id - task id
  * @returns {Promise<?TTask>} - return task object or null
  */
-const deleteById = async (id) => tasksRepo.deleteById(id);
+const deleteById = async (id: string): Promise<TTaskModel | null> => tasksRepo.deleteById(id);
 
 /**
  * Update task
  * @param {TTask} newBoard - params for task update
  * @returns {Promise<?TTask>} - return task object or null
  */
-const updateById = async ({ id, title, order, description, userId, boardId, columnId }) =>
-  tasksRepo.updateById({
-    id,
-    title,
-    order,
-    description,
-    userId,
-    boardId,
-    columnId,
-  });
+const updateById = async (task: TTaskModel): Promise<TTaskModel | null> =>
+  tasksRepo.updateById(task);
 
-module.exports = { getAll, getById, createTask, deleteById, updateById };
+export default { getAll, getById, createTask, deleteById, updateById };

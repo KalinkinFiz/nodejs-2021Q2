@@ -8,7 +8,7 @@
 
 import boardsRepo from './board.memory.repository';
 import { TBoard, TBoardModel } from './board.type';
-// import tasksRepo from '../tasks/task.memory.repository';
+import tasksRepo from '../tasks/task.memory.repository';
 
 /**
  * Get all boards
@@ -39,7 +39,7 @@ const createBoard = async ({ title, columns }: TBoard): Promise<TBoardModel> =>
 const deleteById = async (id: string): Promise<TBoardModel | null> => {
   const boardDeletable = await getById(id);
   boardsRepo.deleteById(id);
-  // tasksRepo.deleteByBoardId(id);
+  tasksRepo.deleteByBoardId(id);
 
   return boardDeletable;
 };

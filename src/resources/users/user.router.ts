@@ -32,9 +32,9 @@ router.route('/').post(
 
 router.route('/:id').get(
   catchErrors(async (req: Request, res: Response) => {
-    const id = `${req.params['id']}`;
+    const { id } = req.params;
 
-    const user = await usersService.getById(id);
+    const user = await usersService.getById(id || '');
 
     if (user) {
       res.json(User.toResponse(user));
@@ -46,7 +46,7 @@ router.route('/:id').get(
 
 router.route('/:id').put(
   catchErrors(async (req: Request, res: Response) => {
-    const id = `${req.params['id']}`;
+    const id = String(req.params['id']);
     const { name, login, password } = req.body;
 
     const user = await usersService.updateById({ id, name, login, password });
@@ -61,9 +61,9 @@ router.route('/:id').put(
 
 router.route('/:id').delete(
   catchErrors(async (req: Request, res: Response) => {
-    const id = `${req.params['id']}`;
+    const { id } = req.params;
 
-    const user = await usersService.deleteById(id);
+    const user = await usersService.deleteById(id || '');
 
     if (!user) {
       return res

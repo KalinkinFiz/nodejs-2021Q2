@@ -35,9 +35,9 @@ router.route('/').post(
 
 router.route('/:id').get(
   catchErrors(async (req: Request, res: Response) => {
-    const id = `${req.params['id']}`;
+    const { id } = req.params;
 
-    const board = await boardsService.getById(id);
+    const board = await boardsService.getById(id || '');
 
     if (board) {
       res.json(Board.toResponse(board));
@@ -49,7 +49,7 @@ router.route('/:id').get(
 
 router.route('/:id').put(
   catchErrors(async (req: Request, res: Response) => {
-    const id = `${req.params['id']}`;
+    const id = String(req.params['id']);
     const { title, columns } = req.body;
 
     const board = await boardsService.updateById({ id, title, columns });
@@ -64,9 +64,9 @@ router.route('/:id').put(
 
 router.route('/:id').delete(
   catchErrors(async (req: Request, res: Response) => {
-    const id = `${req.params['id']}`;
+    const { id } = req.params;
 
-    const board = await boardsService.deleteById(id);
+    const board = await boardsService.deleteById(id || '');
 
     if (!board) {
       return res

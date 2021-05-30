@@ -1,22 +1,22 @@
-const Task = require('./task.model');
+import Task from './task.model';
+import { TTask, TTaskModel } from './task.type';
 
-const TASKS = [new Task()];
+const TASKS: TTaskModel[] = [];
 
-const getAll = async () => TASKS;
+const getAll = async (): Promise<TTaskModel[]> => TASKS;
 
-const getById = async (id) => TASKS.find((task) => task.id === id);
+const getById = async (id: string): Promise<TTaskModel | null> =>
+  TASKS.find((task) => task.id === id) || null;
 
 const createTask = async ({
-  id,
   title,
   order,
   description,
   userId,
   boardId,
   columnId,
-}) => {
+}: TTask): Promise<TTaskModel> => {
   const task = new Task({
-    id,
     title,
     order,
     description,
@@ -28,60 +28,42 @@ const createTask = async ({
   return task;
 };
 
-const deleteById = async (id) => {
+const deleteById = async (id: string): Promise<TTaskModel | null> => {
   const boardPosition = TASKS.findIndex((task) => task.id === id);
 
   if (boardPosition === -1) return null;
 
-  const taskDeletable = TASKS[boardPosition];
+  const taskDeletable = TASKS[boardPosition]!;
 
   TASKS.splice(boardPosition, 1);
   return taskDeletable;
 };
 
-const updateById = async ({
-  id,
-  title,
-  order,
-  description,
-  userId,
-  boardId,
-  columnId,
-}) => {
+const updateById = async ({ id, ...payload }: Partial<TTaskModel>): Promise<TTaskModel | null> => {
   const boardPosition = TASKS.findIndex((task) => task.id === id);
 
   if (boardPosition === -1) return null;
 
-  const oldBoard = TASKS[boardPosition];
-  const newBoard = {
-    ...oldBoard,
-    title,
-    order,
-    description,
-    userId,
-    boardId,
-    columnId,
-  };
+  const oldBoard = TASKS[boardPosition]!;
+  const newBoard = { ...oldBoard, ...payload };
 
   TASKS.splice(boardPosition, 1, newBoard);
   return newBoard;
 };
 
-const removeUserById = async (id) => {
+const removeUserById = async (id: string): Promise<void> => {
   const userTask = TASKS.filter((task) => task.userId === id);
 
-  await Promise.allSettled(
-    userTask.map(async (task) => updateById({ id: task.id, userId: null })),
-  );
+  await Promise.allSettled(userTask.map(async (task) => updateById({ id: task.id, userId: null })));
 };
 
-const deleteByBoardId = async (boardId) => {
+const deleteByBoardId = async (boardId: string): Promise<void> => {
   const boardTask = TASKS.filter((task) => task.boardId === boardId);
 
   await Promise.allSettled(boardTask.map(async (task) => deleteById(task.id)));
 };
 
-module.exports = {
+export default {
   TASKS,
   getAll,
   getById,
