@@ -49,10 +49,10 @@ router.route('/:id').get(
 
 router.route('/:id').put(
   catchErrors(async (req: Request, res: Response) => {
-    const id = String(req.params['id']);
+    const { id } = req.params;
     const { title, columns } = req.body;
 
-    const board = await boardsService.updateById({ id, title, columns });
+    const board = await boardsService.updateById({ id: id || '', title, columns });
 
     if (board) {
       res.status(StatusCodes.OK).json(Board.toResponse(board));

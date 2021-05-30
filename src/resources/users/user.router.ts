@@ -46,10 +46,10 @@ router.route('/:id').get(
 
 router.route('/:id').put(
   catchErrors(async (req: Request, res: Response) => {
-    const id = String(req.params['id']);
+    const { id } = req.params;
     const { name, login, password } = req.body;
 
-    const user = await usersService.updateById({ id, name, login, password });
+    const user = await usersService.updateById({ id: id || '', name, login, password });
 
     if (user) {
       res.status(StatusCodes.OK).json(User.toResponse(user));

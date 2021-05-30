@@ -17,7 +17,7 @@ router.route('/').get(
 
 router.route('/').post(
   catchErrors(async (req: Request, res: Response) => {
-    const boardId = String(req.params['boardId']);
+    const { boardId } = req.params;
     const { title, order, description, userId, columnId } = req.body;
 
     const task = await tasksService.createTask({
@@ -25,7 +25,7 @@ router.route('/').post(
       order,
       description,
       userId,
-      boardId,
+      boardId: boardId || '',
       columnId,
     });
 
@@ -53,17 +53,17 @@ router.route('/:id').get(
 
 router.route('/:id').put(
   catchErrors(async (req: Request, res: Response) => {
-    const id = String(req.params['id']);
-    const boardId = String(req.params['boardId']);
+    const { id } = req.params;
+    const { boardId } = req.params;
     const { title, order, description, userId, columnId } = req.body;
 
     const task = await tasksService.updateById({
-      id,
+      id: id || '',
       title,
       order,
       description,
       userId,
-      boardId,
+      boardId: boardId || '',
       columnId,
     });
 
