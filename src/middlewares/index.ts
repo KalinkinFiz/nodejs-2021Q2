@@ -1,5 +1,5 @@
-//import { errorHandling } from './errorHandling';
+import { errorHandling } from './errorHandling';
 import { logging } from './logging';
-//import uncaughtHandling from './uncaughtHandling';
+import { unhandledRejection, uncaughtException } from './uncaughtHandling';
 
-export { logging };
+export { logging, errorHandling, unhandledRejection, uncaughtException };
