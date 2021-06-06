@@ -6,7 +6,7 @@ const catchErrors = (fn: Function) => async (
   next: NextFunction,
 ): Promise<Function | void> => {
   try {
-    return fn(req, res, next);
+    return await fn(req, res, next);
   } catch (error) {
     return next(error);
   }

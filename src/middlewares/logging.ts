@@ -1,7 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import fs from 'fs';
 import path from 'path';
-import { pipeline } from 'stream';
+import stream from 'stream';
+import util from 'util';
+
+const pipeline = util.promisify(stream.pipeline);
 
 import config from '../common/config';
 
@@ -16,8 +19,9 @@ export const logging = async (req: Request, res: Response, next: NextFunction) =
     fs.mkdirSync(logsFolder);
   }
 
-  await pipeline(
-    `
+  try {
+    await pipeline(
+      stream.Readable.from(`
     request Time:     ${requestTime}
     method:           ${req.method}
     url:              ${`http://localhost:${PORT}${req.baseUrl + req.url}`}
@@ -25,14 +29,12 @@ export const logging = async (req: Request, res: Response, next: NextFunction) =
     query:            ${JSON.stringify(req.query)}
     params:           ${JSON.stringify(req.params)}
     processing time:  ${processTime} ms
-    status code:      ${res.statusCode}\n`,
-    fs.createWriteStream(path.join(__dirname, '../../logs/logging.txt'), { flags: 'a' }),
-    (error) => {
-      if (error) {
-        process.stderr.write(error.message);
-        process.exit(1);
-      }
-    },
-  );
+    status code:      ${res.statusCode}\n`),
+      fs.createWriteStream(path.join(__dirname, '../../logs/logging.txt'), { flags: 'a' }),
+    );
+  } catch (error) {
+    process.stderr.write(error.message);
+    process.exit(1);
+  }
   next();
 };

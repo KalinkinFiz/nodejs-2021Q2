@@ -6,7 +6,7 @@ import userRouter from './resources/users/user.router';
 import boardRouter from './resources/boards/board.router';
 import taskRouter from './resources/tasks/task.router';
 
-import { logging, errorHandling, unhandledRejection, uncaughtException } from './middlewares';
+import { logging, errorHandling } from './middlewares';
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
@@ -22,11 +22,6 @@ app.use('/', (req, res, next) => {
   }
   next();
 });
-
-process.on('uncaughtException', uncaughtException);
-//throw Error('Oops!');
-process.on('unhandledRejection', unhandledRejection);
-//Promise.reject(Error('Oops!'));
 
 app.use(logging);
 app.use('/users', userRouter);

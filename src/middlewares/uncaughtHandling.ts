@@ -16,7 +16,7 @@ export const uncaughtException = async (error: Error) => {
     errorName:       ${name}
     errorMessage:    ${message}\n`,
   );
-  process.stderr.write(`uncaughtException: ${error.message} \n`);
+  process.stderr.write(`uncaughtException: ${error.message} \n ${error.stack}`);
   process.exit(1);
 };
 
@@ -35,6 +35,6 @@ export const unhandledRejection = async (error: Error, promise: Promise<any>) =>
     unhandledRejection:     ${JSON.stringify(promise)}
     errorMessage:           ${message}\n`,
   );
-  process.stderr.write(`unhandledRejection: ${error.message} \n`);
+  process.stderr.write(`unhandledRejection: ${error.message} \n ${error.stack}`);
   process.exit(1);
 };
