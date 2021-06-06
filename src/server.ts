@@ -8,6 +8,6 @@ const { PORT } = config;
 app.listen(PORT, () => console.log(`App is running on http://localhost:${PORT}`));
 
 process.on('uncaughtException', uncaughtException);
-//throw Error('Oops!');
+// throw Error('Oops!');
 process.on('unhandledRejection', unhandledRejection);
-//Promise.reject(Error('Oops!'));
+// Promise.reject(Error('Oops!'));

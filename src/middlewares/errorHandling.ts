@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { StatusCodes, getReasonPhrase } from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import fs from 'fs';
 import path from 'path';
 import stream from 'stream';
@@ -11,11 +11,10 @@ export const errorHandling = async (
   error: Error,
   _req: Request,
   res: Response,
-  _next: NextFunction,
+  next: NextFunction,
 ) => {
   const { name, message, stack } = error;
   const statusCode = name === 'Error' ? StatusCodes.NOT_FOUND : StatusCodes.INTERNAL_SERVER_ERROR;
-  const messageReason = getReasonPhrase(statusCode);
   const logsFolder = path.join(__dirname, '../../logs');
 
   if (!fs.existsSync(logsFolder)) {
@@ -39,5 +38,6 @@ export const errorHandling = async (
     process.exit(1);
   }
 
-  return res.status(statusCode).json({ statusCode, messageReason });
+  res.status(500).send('Internal server error');
+  next();
 };
