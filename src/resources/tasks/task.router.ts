@@ -1,14 +1,14 @@
 import { StatusCodes } from 'http-status-codes';
 import { Request, Response, Router } from 'express';
+import asyncHandler from 'express-async-handler';
 
 import Task from './task.model';
 import tasksService from './task.service';
-import catchErrors from '../../common/catchErrors';
 
 const router = Router({ mergeParams: true });
 
 router.route('/').get(
-  catchErrors(async (_req: Request, res: Response) => {
+  asyncHandler(async (_req: Request, res: Response) => {
     const tasks = await tasksService.getAll();
 
     res.json(tasks.map(Task.toResponse));
@@ -16,7 +16,7 @@ router.route('/').get(
 );
 
 router.route('/').post(
-  catchErrors(async (req: Request, res: Response) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const { boardId } = req.params;
     const { title, order, description, userId, columnId } = req.body;
 
@@ -38,7 +38,7 @@ router.route('/').post(
 );
 
 router.route('/:id').get(
-  catchErrors(async (req: Request, res: Response) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const task = await tasksService.getById(id || '');
@@ -52,7 +52,7 @@ router.route('/:id').get(
 );
 
 router.route('/:id').put(
-  catchErrors(async (req: Request, res: Response) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
     const { boardId } = req.params;
     const { title, order, description, userId, columnId } = req.body;
@@ -76,7 +76,7 @@ router.route('/:id').put(
 );
 
 router.route('/:id').delete(
-  catchErrors(async (req: Request, res: Response) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const task = await tasksService.deleteById(id || '');

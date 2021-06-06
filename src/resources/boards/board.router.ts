@@ -1,16 +1,16 @@
 import { StatusCodes } from 'http-status-codes';
 import { Request, Response, Router } from 'express';
+import asyncHandler from 'express-async-handler';
 
 import Board from './board.model';
 import { TBoard } from './board.type';
 
 import boardsService from './board.service';
-import catchErrors from '../../common/catchErrors';
 
 const router = Router();
 
 router.route('/').get(
-  catchErrors(async (_req: Request, res: Response) => {
+  asyncHandler(async (_req: Request, res: Response) => {
     const boards = await boardsService.getAll();
 
     res.json(boards.map(Board.toResponse));
@@ -18,7 +18,7 @@ router.route('/').get(
 );
 
 router.route('/').post(
-  catchErrors(async (req: Request, res: Response) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const { title, columns }: TBoard = req.body;
 
     const board = await boardsService.createBoard({ title, columns });
@@ -34,7 +34,7 @@ router.route('/').post(
 );
 
 router.route('/:id').get(
-  catchErrors(async (req: Request, res: Response) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const board = await boardsService.getById(id || '');
@@ -48,7 +48,7 @@ router.route('/:id').get(
 );
 
 router.route('/:id').put(
-  catchErrors(async (req: Request, res: Response) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
     const { title, columns } = req.body;
 
@@ -63,7 +63,7 @@ router.route('/:id').put(
 );
 
 router.route('/:id').delete(
-  catchErrors(async (req: Request, res: Response) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const board = await boardsService.deleteById(id || '');

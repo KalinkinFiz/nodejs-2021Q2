@@ -1,15 +1,14 @@
 import { Request, Response, Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import asyncHandler from 'express-async-handler';
 
 import User from './user.model';
-
 import usersService from './user.service';
-import catchErrors from '../../common/catchErrors';
 
 const router = Router();
 
 router.route('/').get(
-  catchErrors(async (_req: Request, res: Response) => {
+  asyncHandler(async (_req: Request, res: Response) => {
     const users = await usersService.getAll();
 
     res.json(users.map(User.toResponse));
@@ -17,7 +16,7 @@ router.route('/').get(
 );
 
 router.route('/').post(
-  catchErrors(async (req: Request, res: Response) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const { name, login, password } = req.body;
 
     const user = await usersService.createUser({ name, login, password });
@@ -31,7 +30,7 @@ router.route('/').post(
 );
 
 router.route('/:id').get(
-  catchErrors(async (req: Request, res: Response) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const user = await usersService.getById(id || '');
@@ -45,7 +44,7 @@ router.route('/:id').get(
 );
 
 router.route('/:id').put(
-  catchErrors(async (req: Request, res: Response) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
     const { name, login, password } = req.body;
 
@@ -60,7 +59,7 @@ router.route('/:id').put(
 );
 
 router.route('/:id').delete(
-  catchErrors(async (req: Request, res: Response) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const user = await usersService.deleteById(id || '');
