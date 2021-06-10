@@ -31,7 +31,7 @@ export const logging = async (req: Request, res: Response, next: NextFunction) =
     query:            ${JSON.stringify(query)}
     processing time:  ${processTime} ms
     status code:      ${res.statusCode}\n`),
-      fs.createWriteStream(path.join(__dirname, '../../logs/logging.txt'), { flags: 'a' }),
+      fs.createWriteStream(path.join(__dirname, '../../logs/logging.log'), { flags: 'a' }),
     );
   } catch (error) {
     process.stderr.write(error.message);

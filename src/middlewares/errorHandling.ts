@@ -29,7 +29,7 @@ export const errorHandling = async (
       errorMessage:    ${message}
       errorStack:      ${stack}\n
       `),
-      fs.createWriteStream(path.join(__dirname, '../../logs/errorHandling.txt'), {
+      fs.createWriteStream(path.join(__dirname, '../../logs/errorHandling.log'), {
         flags: 'a',
       }),
     );
