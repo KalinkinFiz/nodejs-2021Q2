@@ -3,12 +3,11 @@ import fs from 'fs';
 import path from 'path';
 import stream from 'stream';
 import util from 'util';
-
 import config from '../common/config';
 
-const pipeline = util.promisify(stream.pipeline);
-
 const { PORT } = config;
+
+const pipeline = util.promisify(stream.pipeline);
 
 export const logging = async (req: Request, res: Response, next: NextFunction) => {
   const { method, body, params, query } = req;
