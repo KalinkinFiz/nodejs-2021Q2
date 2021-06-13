@@ -5,12 +5,33 @@
 - Git - [Download & Install Git](https://git-scm.com/downloads).
 - Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package
   manager.
+- Docker - [Download & Install Docker](https://www.docker.com/products/docker-desktop). 
 
 ## Downloading
 
 ```
 git clone {repository URL}
 ```
+
+## Running via docker
+Run in terminal:
+
+```
+ docker-compose up
+```
+If you want to stop, press the keyboard shortcut first **Ctrl+C**, then enter in the terminal:
+```
+ docker-compose down
+```
+Rebuild images & start containers:
+```
+ docker compose up --build 
+```
+Сonnected services:
+
+- Postgresql
+- pgAdmin
+- Express
 
 ## Installing NPM modules
 
@@ -22,12 +43,6 @@ npm install
 
 ```
 npm start
-```
-
-## Running via docker
-
-```
- docker-compose up
 ```
 
 After starting the app on port (4000 as default) you can open in your browser OpenAPI documentation
