@@ -13,7 +13,18 @@
 git clone {repository URL}
 ```
 
-## Running via docker
+## Installing NPM modules
+
+```
+npm install
+```
+
+## Running application
+
+```
+npm start
+```
+## Or Running via docker
 Run in terminal:
 
 ```
@@ -32,18 +43,6 @@ Rebuild images & start containers:
 - PostgreSQL
 - pgAdmin
 - Express
-
-## Installing NPM modules
-
-```
-npm install
-```
-
-## Running application
-
-```
-npm start
-```
 
 After starting the app on port (4000 as default) you can open in your browser OpenAPI documentation
 by typing http://localhost:4000/doc/. For more information about OpenAPI/Swagger please visit
