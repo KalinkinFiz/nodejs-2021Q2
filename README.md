@@ -29,7 +29,7 @@ Rebuild images & start containers:
 ```
 Сonnected services:
 
-- Postgresql
+- PostgreSQL
 - pgAdmin
 - Express
 
