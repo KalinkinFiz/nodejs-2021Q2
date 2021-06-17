@@ -1,7 +1,7 @@
 import { getConnection, createConnection } from 'typeorm';
-import { TUser } from '../resources/users/user.type';
-import { TBoard } from '../resources/boards/board.type';
-import { TTask } from '../resources/tasks/task.type';
+import { TUserModel } from '../resources/users/user.type';
+import { TBoardModel } from '../resources/boards/board.type';
+import { TTaskModel } from '../resources/tasks/task.type';
 
 import { config } from '../common/ormconfig';
 
@@ -28,8 +28,8 @@ export const connectedDB = async () => {
   }
 };
 
-const users: TUser[] = [];
-const boards: TBoard[] = [];
-const tasks: TTask[] = [];
+const users: TUserModel[] = [];
+const boards: TBoardModel[] = [];
+const tasks: TTaskModel[] = [];
 
 export default { users, boards, tasks, connectedDB };
