@@ -1,21 +1,8 @@
-/**
- * @file   This file defines a task model
- * @author KalinkinFiz
- * @since  1.0.0
- *
- * @namespace Tasks
- */
-
 import { v4 as uuid } from 'uuid';
 
 import { TTaskModel, TTask } from './task.type';
 
-/** Class representing a Task model */
 class Task {
-  /**
-   * Creates a task instance
-   * @param {TTask} task - task Object
-   */
   id: string;
 
   title: string;
@@ -47,11 +34,6 @@ class Task {
     this.columnId = columnId;
   }
 
-  /**
-   * Return static data for task
-   * @param {TTask} task passing the task object
-   * @returns {TTask} - Task parameters
-   */
   static toResponse(task: TTaskModel): TTaskModel {
     const { id, title, order, description, userId, boardId, columnId } = task;
     return { id, title, order, description, userId, boardId, columnId };
