@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import asyncHandler from 'express-async-handler';
 
-import User from './user.model';
+import UserModel from './user.entity';
 import usersService from './user.service';
 
 const router = Router();
@@ -10,8 +10,7 @@ const router = Router();
 router.route('/').get(
   asyncHandler(async (_req: Request, res: Response) => {
     const users = await usersService.getAll();
-
-    res.json(users.map(User.toResponse));
+    return res.status(StatusCodes.OK).json(users.map(UserModel.toResponse));
   }),
 );
 
@@ -22,7 +21,7 @@ router.route('/').post(
     const user = await usersService.createUser({ name, login, password });
 
     if (user) {
-      res.status(StatusCodes.CREATED).json(User.toResponse(user));
+      res.status(StatusCodes.CREATED).json(UserModel.toResponse(user));
     } else {
       res.status(StatusCodes.BAD_REQUEST).json({ code: 'USER_NOT_CREATE', msg: 'User not create' });
     }
@@ -36,7 +35,7 @@ router.route('/:id').get(
     const user = await usersService.getById(id || '');
 
     if (user) {
-      res.json(User.toResponse(user));
+      res.json(UserModel.toResponse(user));
     } else {
       res.status(StatusCodes.NOT_FOUND).json({ code: 'USER_NOT_FOUND', msg: 'User not found' });
     }
@@ -46,12 +45,11 @@ router.route('/:id').get(
 router.route('/:id').put(
   asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { name, login, password } = req.body;
 
-    const user = await usersService.updateById({ id: id || '', name, login, password });
+    const user = await usersService.updateById(id!, req.body);
 
     if (user) {
-      res.status(StatusCodes.OK).json(User.toResponse(user));
+      res.status(StatusCodes.OK).json(UserModel.toResponse(user));
     } else {
       res.status(StatusCodes.NOT_FOUND).json({ code: 'USER_NOT_FOUND', msg: 'User not found' });
     }
