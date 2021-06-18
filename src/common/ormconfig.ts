@@ -19,4 +19,5 @@ export const config = {
   autoReconnect: true,
   reconnectTries: Number.MAX_VALUE,
   reconnectionInterval: 1000,
+  entities: [path.join(__dirname, '../**/*.entity.ts')],
 } as ConnectionOptions;
