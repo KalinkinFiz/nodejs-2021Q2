@@ -1,75 +1,38 @@
-import Task from './task.model';
-import { TTask, TTaskModel } from './task.type';
+import { EntityRepository, AbstractRepository } from 'typeorm';
+import TaskModel from './task.entity';
 
-const TASKS: TTaskModel[] = [];
+@EntityRepository(TaskModel)
+export class TaskRepository extends AbstractRepository<TaskModel> {
+  createTask(task: Omit<TaskModel, 'id'>) {
+    const tasks = this.repository.create(task);
+    return this.manager.save(tasks);
+  }
 
-const getAll = async (): Promise<TTaskModel[]> => TASKS;
+  getAllTasks(boardId: string) {
+    return this.repository.find({ boardId });
+  }
 
-const getById = async (id: string): Promise<TTaskModel | null> =>
-  TASKS.find((task) => task.id === id) || null;
+  getById(id: string) {
+    return this.repository.findOne(id);
+  }
 
-const createTask = async ({
-  title,
-  order,
-  description,
-  userId,
-  boardId,
-  columnId,
-}: TTask): Promise<TTaskModel> => {
-  const task = new Task({
-    title,
-    order,
-    description,
-    userId,
-    boardId,
-    columnId,
-  });
-  TASKS.push(task);
-  return task;
-};
+  updateById(id: string, task: Partial<TaskModel>) {
+    return this.repository.update({ id }, task);
+  }
 
-const deleteById = async (id: string): Promise<TTaskModel | null> => {
-  const boardPosition = TASKS.findIndex((task) => task.id === id);
+  deleteById(id: string) {
+    return this.repository.delete({ id });
+  }
+}
 
-  if (boardPosition === -1) return null;
+// const removeUserById = async (id: string): Promise<void> => {
+//   const userTask = TASKS.filter((task) => task.userId === id);
 
-  const taskDeletable = TASKS[boardPosition]!;
+//   await Promise.allSettled(userTask.map(async (task) => updateById({ id: task.id, userId: null })));
+// };
 
-  TASKS.splice(boardPosition, 1);
-  return taskDeletable;
-};
+// const deleteByBoardId = async (boardId: string): Promise<void> => {
+//   const boardTask = TASKS.filter((task) => task.boardId === boardId);
 
-const updateById = async ({ id, ...payload }: Partial<TTaskModel>): Promise<TTaskModel | null> => {
-  const boardPosition = TASKS.findIndex((task) => task.id === id);
-
-  if (boardPosition === -1) return null;
-
-  const oldBoard = TASKS[boardPosition]!;
-  const newBoard = { ...oldBoard, ...payload };
-
-  TASKS.splice(boardPosition, 1, newBoard);
-  return newBoard;
-};
-
-const removeUserById = async (id: string): Promise<void> => {
-  const userTask = TASKS.filter((task) => task.userId === id);
-
-  await Promise.allSettled(userTask.map(async (task) => updateById({ id: task.id, userId: null })));
-};
-
-const deleteByBoardId = async (boardId: string): Promise<void> => {
-  const boardTask = TASKS.filter((task) => task.boardId === boardId);
-
-  await Promise.allSettled(boardTask.map(async (task) => deleteById(task.id)));
-};
-
-export default {
-  TASKS,
-  getAll,
-  getById,
-  createTask,
-  deleteById,
-  updateById,
-  removeUserById,
-  deleteByBoardId,
-};
+//   await Promise.allSettled(boardTask.map(async (task) => deleteById(task.id)));
+// };

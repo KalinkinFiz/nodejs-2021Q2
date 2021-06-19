@@ -1,30 +1,44 @@
-import tasksRepo from './task.memory.repository';
-import { TTask, TTaskModel } from './task.type';
+import { getCustomRepository } from 'typeorm';
+import TaskModel from './task.entity';
 
-const getAll = async (): Promise<TTaskModel[]> => tasksRepo.getAll();
+import { TaskRepository } from './task.memory.repository';
 
-const getById = async (id: string): Promise<TTaskModel | null> => tasksRepo.getById(id);
+const createTask = async (boardId: string, tasks: Omit<TaskModel, 'id'>): Promise<TaskModel> => {
+  const taskRepository = getCustomRepository(TaskRepository);
+  const taskCreatable = { ...tasks, boardId };
+  const task = await taskRepository.createTask(taskCreatable);
+  return task;
+};
 
-const createTask = async ({
-  title,
-  order,
-  description,
-  userId,
-  boardId,
-  columnId,
-}: TTask): Promise<TTaskModel> =>
-  tasksRepo.createTask({
-    title,
-    order,
-    description,
-    userId,
-    boardId,
-    columnId,
-  });
+const getAll = async (boardId: string): Promise<TaskModel[]> => {
+  const taskRepository = getCustomRepository(TaskRepository);
+  return taskRepository.getAllTasks(boardId);
+};
 
-const deleteById = async (id: string): Promise<TTaskModel | null> => tasksRepo.deleteById(id);
+const getById = async (id: string): Promise<TaskModel | null> => {
+  const taskRepository = getCustomRepository(TaskRepository);
+  const task = await taskRepository.getById(id);
+  if (!task) return null;
+  return task;
+};
 
-const updateById = async (task: TTaskModel): Promise<TTaskModel | null> =>
-  tasksRepo.updateById(task);
+const deleteById = async (id: string): Promise<TaskModel | null> => {
+  const taskRepository = getCustomRepository(TaskRepository);
+  const taskDeletable = await taskRepository.getById(id);
+  if (!taskDeletable) return null;
+  await taskRepository.deleteById(id);
+  return taskDeletable;
+};
+
+const updateById = async (
+  id: string,
+  tasks: Partial<Omit<TaskModel, 'id'>>,
+): Promise<TaskModel | null> => {
+  const taskRepository = getCustomRepository(TaskRepository);
+  await taskRepository.updateById(id, tasks);
+  const task = await taskRepository.getById(id);
+  if (!task) return null;
+  return task;
+};
 
 export default { getAll, getById, createTask, deleteById, updateById };
