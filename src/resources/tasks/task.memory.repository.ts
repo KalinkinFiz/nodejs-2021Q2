@@ -24,15 +24,3 @@ export class TaskRepository extends AbstractRepository<TaskModel> {
     return this.repository.delete({ id });
   }
 }
-
-// const removeUserById = async (id: string): Promise<void> => {
-//   const userTask = TASKS.filter((task) => task.userId === id);
-
-//   await Promise.allSettled(userTask.map(async (task) => updateById({ id: task.id, userId: null })));
-// };
-
-// const deleteByBoardId = async (boardId: string): Promise<void> => {
-//   const boardTask = TASKS.filter((task) => task.boardId === boardId);
-
-//   await Promise.allSettled(boardTask.map(async (task) => deleteById(task.id)));
-// };
