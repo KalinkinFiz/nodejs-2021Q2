@@ -1,47 +1,26 @@
-import Board from './board.model';
-import { TBoardModel, TBoard } from './board.type';
+import { EntityRepository, AbstractRepository } from 'typeorm';
+import BoardModel from './board.entity';
 
-const BOARDS: TBoardModel[] = [];
+@EntityRepository(BoardModel)
+export class BoardRepository extends AbstractRepository<BoardModel> {
+  createBoard(board: Omit<BoardModel, 'id'>) {
+    const boards = this.repository.create(board);
+    return this.manager.save(boards);
+  }
 
-const getAll = async (): Promise<TBoardModel[]> => BOARDS;
+  getAllBoards() {
+    return this.repository.find();
+  }
 
-const getById = async (id: string): Promise<TBoardModel | null> =>
-  BOARDS.find((board) => board.id === id) || null;
+  getById(id: string) {
+    return this.repository.findOne({ id });
+  }
 
-const createBoard = async ({ title, columns }: TBoard): Promise<TBoardModel> => {
-  const board = new Board({ title, columns });
-  BOARDS.push(board);
-  return board;
-};
+  updateById(id: string, board: Partial<BoardModel>) {
+    return this.repository.update({ id }, board);
+  }
 
-const deleteById = async (id: string): Promise<TBoardModel | null> => {
-  const boardPosition = BOARDS.findIndex((board) => board.id === id);
-
-  if (boardPosition === -1) return null;
-
-  const boardDeletable = BOARDS[boardPosition]!;
-
-  BOARDS.splice(boardPosition, 1);
-  return boardDeletable;
-};
-
-const updateById = async ({ id, title, columns }: TBoardModel): Promise<TBoardModel | null> => {
-  const boardPosition = BOARDS.findIndex((board) => board.id === id);
-
-  if (boardPosition === -1) return null;
-
-  const oldBoard = BOARDS[boardPosition]!;
-  const newBoard = { ...oldBoard, title, columns };
-
-  BOARDS.splice(boardPosition, 1, newBoard);
-  return newBoard;
-};
-
-export default {
-  BOARDS,
-  getAll,
-  getById,
-  createBoard,
-  deleteById,
-  updateById,
-};
+  deleteById(id: string) {
+    return this.repository.delete({ id });
+  }
+}
