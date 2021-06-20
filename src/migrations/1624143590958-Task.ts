@@ -33,6 +33,7 @@ export class Task1624143590958 implements MigrationInterface {
           {
             name: 'boardId',
             type: 'varChar',
+            isNullable: true,
           },
           {
             name: 'columnId',

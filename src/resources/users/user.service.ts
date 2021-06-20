@@ -2,7 +2,7 @@ import { getCustomRepository } from 'typeorm';
 import UserModel from './user.entity';
 
 import { UserRepository } from './user.memory.repository';
-// import tasksRepo from '../tasks/task.memory.repository';
+import { TaskRepository } from '../tasks/task.memory.repository';
 
 const createUser = async ({ name, login, password }: Omit<UserModel, 'id'>): Promise<UserModel> => {
   const userRepository = getCustomRepository(UserRepository);
@@ -27,6 +27,10 @@ const deleteById = async (id: string): Promise<UserModel | null> => {
   const userDeletable = await userRepository.getById(id);
   if (!userDeletable) return null;
   await userRepository.deleteById(id);
+
+  const taskRepository = getCustomRepository(TaskRepository);
+  await taskRepository.updateByUserId(id, { userId: null });
+
   return userDeletable;
 };
 

@@ -32,10 +32,10 @@ const deleteById = async (id: string): Promise<TaskModel | null> => {
 
 const updateById = async (
   id: string,
-  tasks: Partial<Omit<TaskModel, 'id'>>,
+  data: Partial<Omit<TaskModel, 'id'>>,
 ): Promise<TaskModel | null> => {
   const taskRepository = getCustomRepository(TaskRepository);
-  await taskRepository.updateById(id, tasks);
+  await taskRepository.updateById(id, data);
   const task = await taskRepository.getById(id);
   if (!task) return null;
   return task;

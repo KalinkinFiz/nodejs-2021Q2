@@ -16,8 +16,16 @@ export class TaskRepository extends AbstractRepository<TaskModel> {
     return this.repository.findOne(id);
   }
 
-  updateById(id: string, task: Partial<TaskModel>) {
-    return this.repository.update({ id }, task);
+  updateById(id: string, data: Partial<TaskModel>) {
+    return this.repository.update(id, data);
+  }
+
+  updateByUserId(userId: string, task: Partial<TaskModel>) {
+    return this.repository.update({ userId }, task);
+  }
+
+  updateByBoardId(boardId: string, task: Partial<TaskModel>) {
+    return this.repository.update({ boardId }, task);
   }
 
   deleteById(id: string) {
