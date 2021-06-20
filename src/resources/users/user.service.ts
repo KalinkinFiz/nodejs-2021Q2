@@ -34,9 +34,9 @@ const deleteById = async (id: string): Promise<UserModel | null> => {
   return userDeletable;
 };
 
-const updateById = async (id: string, users: Omit<UserModel, 'id'>): Promise<UserModel | null> => {
+const updateById = async (id: string, data: Omit<UserModel, 'id'>): Promise<UserModel | null> => {
   const userRepository = getCustomRepository(UserRepository);
-  await userRepository.updateById(id, users);
+  await userRepository.updateById(id, data);
   const user = await userRepository.getById(id);
   if (!user) return null;
   return user;

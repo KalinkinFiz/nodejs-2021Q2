@@ -3,9 +3,9 @@ import TaskModel from './task.entity';
 
 import { TaskRepository } from './task.memory.repository';
 
-const createTask = async (boardId: string, tasks: Omit<TaskModel, 'id'>): Promise<TaskModel> => {
+const createTask = async (boardId: string, data: Omit<TaskModel, 'id'>): Promise<TaskModel> => {
   const taskRepository = getCustomRepository(TaskRepository);
-  const taskCreatable = { ...tasks, boardId };
+  const taskCreatable = { ...data, boardId };
   const task = await taskRepository.createTask(taskCreatable);
   return task;
 };
