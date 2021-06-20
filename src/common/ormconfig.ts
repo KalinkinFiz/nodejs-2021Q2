@@ -6,10 +6,13 @@ dotenv.config({
   path: path.join(__dirname, '../../.env'),
 });
 
+// Here remove those variables that you will not use anymore when checking on localhost
 const { POSTGRES_HOST, POSTGRES_PORT, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB } = process.env;
 
 export default {
   type: 'postgres',
+  // To run the application from a non-Docker host, change the host value (POSTGRES_HOST) to 'localhost''.
+  // Also replace POSTGRES_USER, POSTGRES_PASSWORD, etc. to your values.
   host: POSTGRES_HOST,
   port: Number(POSTGRES_PORT),
   username: POSTGRES_USER,
