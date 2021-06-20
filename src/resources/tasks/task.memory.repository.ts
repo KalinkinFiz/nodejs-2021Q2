@@ -12,12 +12,12 @@ export class TaskRepository extends AbstractRepository<TaskModel> {
     return this.repository.find({ boardId });
   }
 
-  getById(id: string) {
-    return this.repository.findOne(id);
+  getById(boardId: string, id: string) {
+    return this.repository.findOne({ boardId, id });
   }
 
-  updateById(id: string, data: Partial<TaskModel>) {
-    return this.repository.update(id, data);
+  updateById(boardId: string, id: string, data: Partial<TaskModel>) {
+    return this.repository.update({ boardId, id }, data);
   }
 
   updateByUserId(userId: string, task: Partial<TaskModel>) {
@@ -28,7 +28,7 @@ export class TaskRepository extends AbstractRepository<TaskModel> {
     return this.repository.update({ boardId }, task);
   }
 
-  deleteById(id: string) {
-    return this.repository.delete({ id });
+  deleteById(boardId: string, id: string) {
+    return this.repository.delete({ boardId, id });
   }
 }

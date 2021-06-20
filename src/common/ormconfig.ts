@@ -11,7 +11,7 @@ const { POSTGRES_HOST, POSTGRES_PORT, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES
 
 export default {
   type: 'postgres',
-  // To run the application from a non-Docker host, change the host value (POSTGRES_HOST) to 'localhost''.
+  // To run the application from a non-Docker host, change the host value (POSTGRES_HOST) to 'localhost'.
   // Also replace POSTGRES_USER, POSTGRES_PASSWORD, etc. to your values.
   host: POSTGRES_HOST,
   port: Number(POSTGRES_PORT),

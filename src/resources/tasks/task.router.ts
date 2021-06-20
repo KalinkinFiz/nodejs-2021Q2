@@ -32,9 +32,9 @@ router.route('/').post(
 
 router.route('/:id').get(
   asyncHandler(async (req: Request, res: Response) => {
-    const { id } = req.params;
+    const { boardId, id } = req.params;
 
-    const task = await tasksService.getById(id!);
+    const task = await tasksService.getById(boardId!, id!);
 
     if (task) {
       res.json(Task.toResponse(task));
@@ -46,9 +46,9 @@ router.route('/:id').get(
 
 router.route('/:id').put(
   asyncHandler(async (req: Request, res: Response) => {
-    const { id } = req.params;
+    const { boardId, id } = req.params;
 
-    const task = await tasksService.updateById(id!, req.body);
+    const task = await tasksService.updateById(boardId!, id!, req.body);
 
     if (task) {
       res.status(StatusCodes.OK).json(Task.toResponse(task));
@@ -60,9 +60,9 @@ router.route('/:id').put(
 
 router.route('/:id').delete(
   asyncHandler(async (req: Request, res: Response) => {
-    const { id } = req.params;
+    const { boardId, id } = req.params;
 
-    const task = await tasksService.deleteById(id!);
+    const task = await tasksService.deleteById(boardId!, id!);
 
     if (task) {
       res

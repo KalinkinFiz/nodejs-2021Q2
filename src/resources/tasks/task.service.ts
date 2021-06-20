@@ -15,29 +15,30 @@ const getAll = async (boardId: string): Promise<TaskModel[]> => {
   return taskRepository.getAllTasks(boardId);
 };
 
-const getById = async (id: string): Promise<TaskModel | null> => {
+const getById = async (boardId: string, id: string): Promise<TaskModel | null> => {
   const taskRepository = getCustomRepository(TaskRepository);
-  const task = await taskRepository.getById(id);
+  const task = await taskRepository.getById(boardId, id);
   if (!task) return null;
   return task;
 };
 
-const deleteById = async (id: string): Promise<TaskModel | null> => {
+const deleteById = async (boardId: string, id: string): Promise<TaskModel | null> => {
   const taskRepository = getCustomRepository(TaskRepository);
-  const taskDeletable = await taskRepository.getById(id);
+  const taskDeletable = await taskRepository.getById(boardId, id);
   if (!taskDeletable) return null;
-  await taskRepository.deleteById(id);
+  await taskRepository.deleteById(boardId, id);
   return taskDeletable;
 };
 
 const updateById = async (
+  boardId: string,
   id: string,
   data: Partial<Omit<TaskModel, 'id'>>,
 ): Promise<TaskModel | null> => {
   const taskRepository = getCustomRepository(TaskRepository);
-  await taskRepository.updateById(id, data);
-  const task = await taskRepository.getById(id);
+  const task = await taskRepository.getById(boardId, id);
   if (!task) return null;
+  await taskRepository.updateById(boardId, id, data);
   return task;
 };
 
