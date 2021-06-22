@@ -4,9 +4,9 @@ import UserModel from './user.entity';
 import { UserRepository } from './user.memory.repository';
 import { TaskRepository } from '../tasks/task.memory.repository';
 
-const createUser = async ({ name, login, password }: Omit<UserModel, 'id'>): Promise<UserModel> => {
+const createUser = async (data: Omit<UserModel, 'id'>): Promise<UserModel> => {
   const userRepository = getCustomRepository(UserRepository);
-  const user = await userRepository.createUser({ name, login, password });
+  const user = await userRepository.createUser(data);
   return user;
 };
 
