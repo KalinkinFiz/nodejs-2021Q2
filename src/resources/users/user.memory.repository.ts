@@ -16,6 +16,10 @@ export class UserRepository extends AbstractRepository<UserModel> {
     return this.repository.findOne({ id });
   }
 
+  findByCredentials(login: string) {
+    return this.repository.findOne({ login });
+  }
+
   updateById(id: string, user: Omit<UserModel, 'id'>) {
     return this.repository.update({ id }, user);
   }

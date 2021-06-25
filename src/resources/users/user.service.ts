@@ -1,4 +1,5 @@
 import { getCustomRepository } from 'typeorm';
+import bcrypt from 'bcrypt';
 import UserModel from './user.entity';
 
 import { UserRepository } from './user.memory.repository';
@@ -22,6 +23,15 @@ const getById = async (id: string): Promise<UserModel | null> => {
   return user;
 };
 
+const findByCredentials = async (login: string, password: string): Promise<UserModel | null> => {
+  const userRepository = getCustomRepository(UserRepository);
+  const user = await userRepository.findByCredentials(login);
+  if (!user) return null;
+  const passwordVerification = await bcrypt.compare(password, user.password);
+  if (!passwordVerification) return null;
+  return user;
+};
+
 const deleteById = async (id: string): Promise<UserModel | null> => {
   const userRepository = getCustomRepository(UserRepository);
   const userDeletable = await userRepository.getById(id);
@@ -42,4 +52,4 @@ const updateById = async (id: string, data: Omit<UserModel, 'id'>): Promise<User
   return user;
 };
 
-export default { getAll, getById, createUser, deleteById, updateById };
+export default { getAll, getById, findByCredentials, createUser, deleteById, updateById };
