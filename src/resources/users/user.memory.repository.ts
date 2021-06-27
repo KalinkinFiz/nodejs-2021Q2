@@ -1,52 +1,29 @@
-import { TUserModel, TUser } from './user.type';
-import User from './user.model';
+import { EntityRepository, AbstractRepository } from 'typeorm';
+import UserModel from './user.entity';
 
-const USERS: TUserModel[] = [];
+@EntityRepository(UserModel)
+export class UserRepository extends AbstractRepository<UserModel> {
+  createUser({ name, login, password }: Omit<UserModel, 'id'>) {
+    const user = new UserModel();
+    user.name = name;
+    user.login = login;
+    user.password = password;
+    return this.manager.save(user);
+  }
 
-const getAll = async (): Promise<TUserModel[]> => USERS;
+  getAllUsers() {
+    return this.repository.find();
+  }
 
-const getById = async (id: string): Promise<TUserModel | null> =>
-  USERS.find((user) => user.id === id) || null;
+  getById(id: string) {
+    return this.repository.findOne({ id });
+  }
 
-const createUser = async ({ name, login, password }: TUser): Promise<TUserModel> => {
-  const user = new User({ name, login, password });
-  USERS.push(user);
-  return user;
-};
+  updateById(id: string, user: Omit<UserModel, 'id'>) {
+    return this.repository.update({ id }, user);
+  }
 
-const deleteById = async (id: string): Promise<TUserModel | null> => {
-  const userPosition = USERS.findIndex((user) => user.id === id);
-
-  if (userPosition === -1) return null;
-
-  const userDeletable = USERS[userPosition];
-
-  USERS.splice(userPosition, 1);
-  return userDeletable!;
-};
-
-const updateById = async ({
-  id,
-  name,
-  login,
-  password,
-}: TUserModel): Promise<TUserModel | null> => {
-  const userPosition = USERS.findIndex((user) => user.id === id);
-
-  if (userPosition === -1) return null;
-
-  const oldUser = USERS[userPosition];
-  const newUser = { ...oldUser, name, login, password, id };
-
-  USERS.splice(userPosition, 1, newUser);
-  return newUser!;
-};
-
-export default {
-  USERS,
-  getAll,
-  getById,
-  createUser,
-  deleteById,
-  updateById,
-};
+  deleteById(id: string) {
+    return this.repository.delete({ id });
+  }
+}

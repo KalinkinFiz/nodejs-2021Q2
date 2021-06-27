@@ -1,54 +1,45 @@
-/**
- * @file   This file define the user services
- * @author KalinkinFiz
- * @since  1.0.0
- *
- * @namespace Users
- */
+import { getCustomRepository } from 'typeorm';
+import UserModel from './user.entity';
 
-import usersRepo from './user.memory.repository';
-import tasksRepo from '../tasks/task.memory.repository';
-import { TUserModel, TUser } from './user.type';
+import { UserRepository } from './user.memory.repository';
+import { TaskRepository } from '../tasks/task.memory.repository';
 
-/**
- * Get all users
- * @returns {Promise<TUserModel[]>} - array of users
- */
-const getAll = async (): Promise<TUserModel[]> => usersRepo.getAll();
+const createUser = async ({ name, login, password }: Omit<UserModel, 'id'>): Promise<UserModel> => {
+  const userRepository = getCustomRepository(UserRepository);
+  const user = await userRepository.createUser({ name, login, password });
+  return user;
+};
 
-/**
- * User return by id
- * @param id - id user
- * @returns {Promise<?TUserModel>} - return user object or null
- */
-const getById = async (id: string): Promise<TUserModel | null> => usersRepo.getById(id);
+const getAll = async (): Promise<UserModel[]> => {
+  const userRepository = getCustomRepository(UserRepository);
+  return userRepository.getAllUsers();
+};
 
-/**
- * Create users
- * @param {TUser} user - new user parameters
- * @returns {Promise<TUserModel>} - return new user object
- */
-const createUser = async (user: TUser): Promise<TUserModel> => usersRepo.createUser(user);
+const getById = async (id: string): Promise<UserModel | null> => {
+  const userRepository = getCustomRepository(UserRepository);
+  const user = await userRepository.getById(id);
+  if (!user) return null;
+  return user;
+};
 
-/**
- * Delete user; Removing users tasks
- * @param id - user id
- * @returns {Promise<?TUserModel>} - return user object or null
- */
-const deleteById = async (id: string): Promise<TUserModel | null> => {
-  const userDeletable = await getById(id);
-  usersRepo.deleteById(id);
-  tasksRepo.removeUserById(id);
+const deleteById = async (id: string): Promise<UserModel | null> => {
+  const userRepository = getCustomRepository(UserRepository);
+  const userDeletable = await userRepository.getById(id);
+  if (!userDeletable) return null;
+  await userRepository.deleteById(id);
+
+  const taskRepository = getCustomRepository(TaskRepository);
+  await taskRepository.updateByUserId(id, { userId: null });
 
   return userDeletable;
 };
 
-/**
- * Update user by id
- * @param {TUserModel} user - params for user update
- * @returns {Promise<?TUserModel>} - return user object or null
- */
-const updateById = async (user: TUserModel): Promise<TUserModel | null> =>
-  usersRepo.updateById(user);
+const updateById = async (id: string, data: Omit<UserModel, 'id'>): Promise<UserModel | null> => {
+  const userRepository = getCustomRepository(UserRepository);
+  await userRepository.updateById(id, data);
+  const user = await userRepository.getById(id);
+  if (!user) return null;
+  return user;
+};
 
 export default { getAll, getById, createUser, deleteById, updateById };

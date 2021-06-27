@@ -2,9 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import { Request, Response, Router } from 'express';
 import asyncHandler from 'express-async-handler';
 
-import Board from './board.model';
-import { TBoard } from './board.type';
-
+import Board from './board.entity';
 import boardsService from './board.service';
 
 const router = Router();
@@ -12,14 +10,13 @@ const router = Router();
 router.route('/').get(
   asyncHandler(async (_req: Request, res: Response) => {
     const boards = await boardsService.getAll();
-
-    res.json(boards.map(Board.toResponse));
+    return res.status(StatusCodes.OK).json(boards.map(Board.toResponse));
   }),
 );
 
 router.route('/').post(
   asyncHandler(async (req: Request, res: Response) => {
-    const { title, columns }: TBoard = req.body;
+    const { title, columns }: Board = req.body;
 
     const board = await boardsService.createBoard({ title, columns });
 
@@ -50,9 +47,8 @@ router.route('/:id').get(
 router.route('/:id').put(
   asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { title, columns } = req.body;
 
-    const board = await boardsService.updateById({ id: id || '', title, columns });
+    const board = await boardsService.updateById(id!, req.body);
 
     if (board) {
       res.status(StatusCodes.OK).json(Board.toResponse(board));

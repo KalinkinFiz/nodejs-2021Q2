@@ -1,55 +1,54 @@
-/**
- * @file   This file defines a board service
- * @author KalinkinFiz
- * @since  1.0.0
- *
- * @namespace Boards
- */
+import { getCustomRepository } from 'typeorm';
 
-import boardsRepo from './board.memory.repository';
-import { TBoard, TBoardModel } from './board.type';
-import tasksRepo from '../tasks/task.memory.repository';
+import BoardModel from './board.entity';
+import Column from '../columns/column';
 
-/**
- * Get all boards
- * @returns {Promise<TBoardModel[]>} - array of boards
- */
-const getAll = async (): Promise<TBoardModel[]> => boardsRepo.getAll();
+import { BoardRepository } from './board.memory.repository';
+import { TaskRepository } from '../tasks/task.memory.repository';
 
-/**
- * Board return by id
- * @param id - id board
- * @returns {Promise<?TBoardModel>} - return board object or null
- */
-const getById = async (id: string): Promise<TBoardModel | null> => boardsRepo.getById(id);
-
-/**
- * Create boards
- * @param {TBoard} board - new board parameters
- * @returns {Promise<TBoardModel>} - return new board object
- */
-const createBoard = async ({ title, columns }: TBoard): Promise<TBoardModel> =>
-  boardsRepo.createBoard({ title, columns });
-
-/**
- * Delete board; Removing taskboards
- * @param id - board id
- * @returns {Promise<?TBoardModel>} - return board object or null
- */
-const deleteById = async (id: string): Promise<TBoardModel | null> => {
-  const boardDeletable = await getById(id);
-  boardsRepo.deleteById(id);
-  tasksRepo.deleteByBoardId(id);
-
-  return boardDeletable;
+const createBoard = async (data: Omit<BoardModel, 'id'>): Promise<BoardModel> => {
+  const boardRepository = getCustomRepository(BoardRepository);
+  const columns = await Promise.all(data.columns?.map(Column.create) || []);
+  const boardCreatable = { ...data, columns };
+  const board = await boardRepository.createBoard(boardCreatable);
+  return board;
 };
 
-/**
- * Update board
- * @param {TBoardModel} board - params for board update
- * @returns {Promise<?TBoardModel>} - return board object or null
- */
-const updateById = async (board: TBoardModel): Promise<TBoardModel | null> =>
-  boardsRepo.updateById(board);
+const getAll = async (): Promise<BoardModel[]> => {
+  const boardRepository = getCustomRepository(BoardRepository);
+  return boardRepository.getAllBoards();
+};
+
+const getById = async (id: string): Promise<BoardModel | null> => {
+  const boardRepository = getCustomRepository(BoardRepository);
+  const board = await boardRepository.getById(id);
+  if (!board) return null;
+  return board;
+};
+
+const deleteById = async (id: string): Promise<BoardModel | null> => {
+  const boardRepository = getCustomRepository(BoardRepository);
+  const boardDeletable = await boardRepository.getById(id);
+  if (!boardDeletable) return null;
+  await boardRepository.deleteById(id);
+
+  const taskRepository = getCustomRepository(TaskRepository);
+  await taskRepository.updateByBoardId(id, { boardId: null });
+
+  return boardDeletable!;
+};
+
+const updateById = async (
+  id: string,
+  data: Partial<Omit<BoardModel, 'id'>>,
+): Promise<BoardModel | null> => {
+  const boardRepository = getCustomRepository(BoardRepository);
+  const columns = await Promise.all(data.columns?.map(Column.create) || []);
+  const boardUpdatable = { ...data, columns };
+  await boardRepository.updateById(id, boardUpdatable);
+  const board = await boardRepository.getById(id);
+  if (!board) return null;
+  return board;
+};
 
 export default { getAll, getById, createBoard, deleteById, updateById };

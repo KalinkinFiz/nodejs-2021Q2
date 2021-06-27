@@ -1,62 +1,45 @@
-/**
- * @file   This file defines a task service
- * @author KalinkinFiz
- * @since  1.0.0
- *
- * @namespace Tasks
- */
+import { getCustomRepository } from 'typeorm';
+import TaskModel from './task.entity';
 
-import tasksRepo from './task.memory.repository';
-import { TTask, TTaskModel } from './task.type';
+import { TaskRepository } from './task.memory.repository';
 
-/**
- * Get all tasks
- * @returns {Promise<TTask[]>} - array of tasks
- */
-const getAll = async (): Promise<TTaskModel[]> => tasksRepo.getAll();
+const createTask = async (boardId: string, data: Omit<TaskModel, 'id'>): Promise<TaskModel> => {
+  const taskRepository = getCustomRepository(TaskRepository);
+  const taskCreatable = { ...data, boardId };
+  const task = await taskRepository.createTask(taskCreatable);
+  return task;
+};
 
-/**
- * Task return by id
- * @param id - id task
- * @returns {Promise<?TTask>} - return task object or null
- */
-const getById = async (id: string): Promise<TTaskModel | null> => tasksRepo.getById(id);
+const getAll = async (boardId: string): Promise<TaskModel[]> => {
+  const taskRepository = getCustomRepository(TaskRepository);
+  return taskRepository.getAllTasks(boardId);
+};
 
-/**
- * Create tasks
- * @param {TTask} task - new task parameters
- * @returns {Promise<TTask>} - return new task object
- */
-const createTask = async ({
-  title,
-  order,
-  description,
-  userId,
-  boardId,
-  columnId,
-}: TTask): Promise<TTaskModel> =>
-  tasksRepo.createTask({
-    title,
-    order,
-    description,
-    userId,
-    boardId,
-    columnId,
-  });
+const getById = async (boardId: string, id: string): Promise<TaskModel | null> => {
+  const taskRepository = getCustomRepository(TaskRepository);
+  const task = await taskRepository.getById(boardId, id);
+  if (!task) return null;
+  return task;
+};
 
-/**
- * Delete task
- * @param id - task id
- * @returns {Promise<?TTask>} - return task object or null
- */
-const deleteById = async (id: string): Promise<TTaskModel | null> => tasksRepo.deleteById(id);
+const deleteById = async (boardId: string, id: string): Promise<TaskModel | null> => {
+  const taskRepository = getCustomRepository(TaskRepository);
+  const taskDeletable = await taskRepository.getById(boardId, id);
+  if (!taskDeletable) return null;
+  await taskRepository.deleteById(boardId, id);
+  return taskDeletable;
+};
 
-/**
- * Update task
- * @param {TTask} newBoard - params for task update
- * @returns {Promise<?TTask>} - return task object or null
- */
-const updateById = async (task: TTaskModel): Promise<TTaskModel | null> =>
-  tasksRepo.updateById(task);
+const updateById = async (
+  boardId: string,
+  id: string,
+  data: Partial<Omit<TaskModel, 'id'>>,
+): Promise<TaskModel | null> => {
+  const taskRepository = getCustomRepository(TaskRepository);
+  const task = await taskRepository.getById(boardId, id);
+  if (!task) return null;
+  await taskRepository.updateById(boardId, id, data);
+  return task;
+};
 
 export default { getAll, getById, createTask, deleteById, updateById };

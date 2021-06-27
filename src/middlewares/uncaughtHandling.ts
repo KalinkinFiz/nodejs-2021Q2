@@ -20,7 +20,7 @@ export const uncaughtException = async (error: Error) => {
   process.exit(1);
 };
 
-export const unhandledRejection = async (error: Error, promise: Promise<any>) => {
+export const unhandledRejection = async (error: Error, promise: Promise<void>) => {
   const { message } = error;
   const logsFolder = path.join(__dirname, '../../logs');
 
