@@ -5,7 +5,7 @@
 - Git - [Download & Install Git](https://git-scm.com/downloads).
 - Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package
   manager.
-- Docker - [Download & Install Docker](https://www.docker.com/products/docker-desktop). 
+- Docker - [Download & Install Docker](https://www.docker.com/products/docker-desktop).
 
 ## Downloading
 
@@ -24,20 +24,27 @@ npm install
 ```
 npm start
 ```
+
 ## Or Running via docker
+
 Run in terminal:
 
 ```
  docker-compose up
 ```
+
 If you want to stop, press the keyboard shortcut first **Ctrl+C**, then enter in the terminal:
+
 ```
  docker-compose down
 ```
+
 Rebuild images & start containers:
+
 ```
- docker compose up --build 
+ docker compose up --build
 ```
+
 Сonnected services:
 
 - PostgreSQL
@@ -51,18 +58,6 @@ https://swagger.io/.
 ## Testing
 
 After application running open new terminal and enter:
-
-To run all tests without authorization
-
-```
-npm test
-```
-
-To run only one of all test suites (users, boards or tasks)
-
-```
-npm test <suite name>
-```
 
 To run all test with authorization
 

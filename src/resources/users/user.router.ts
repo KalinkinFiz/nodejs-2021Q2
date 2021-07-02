@@ -16,9 +16,7 @@ router.route('/').get(
 
 router.route('/').post(
   asyncHandler(async (req: Request, res: Response) => {
-    const { name, login, password } = req.body;
-
-    const user = await usersService.createUser({ name, login, password });
+    const user = await usersService.createUser(req.body);
 
     if (user) {
       res.status(StatusCodes.CREATED).json(UserModel.toResponse(user));

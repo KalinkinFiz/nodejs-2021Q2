@@ -4,11 +4,8 @@ import UserModel from './user.entity';
 @EntityRepository(UserModel)
 export class UserRepository extends AbstractRepository<UserModel> {
   createUser({ name, login, password }: Omit<UserModel, 'id'>) {
-    const user = new UserModel();
-    user.name = name;
-    user.login = login;
-    user.password = password;
-    return this.manager.save(user);
+    const user = this.repository.create({ name, login, password });
+    return this.repository.save(user);
   }
 
   getAllUsers() {
@@ -17,6 +14,10 @@ export class UserRepository extends AbstractRepository<UserModel> {
 
   getById(id: string) {
     return this.repository.findOne({ id });
+  }
+
+  findByCredentials(login: string) {
+    return this.repository.findOne({ login });
   }
 
   updateById(id: string, user: Omit<UserModel, 'id'>) {

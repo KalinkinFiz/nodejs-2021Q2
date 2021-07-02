@@ -1,12 +1,13 @@
 import { getCustomRepository } from 'typeorm';
+import bcrypt from 'bcrypt';
 import UserModel from './user.entity';
 
 import { UserRepository } from './user.memory.repository';
 import { TaskRepository } from '../tasks/task.memory.repository';
 
-const createUser = async ({ name, login, password }: Omit<UserModel, 'id'>): Promise<UserModel> => {
+const createUser = async (data: Omit<UserModel, 'id'>): Promise<UserModel> => {
   const userRepository = getCustomRepository(UserRepository);
-  const user = await userRepository.createUser({ name, login, password });
+  const user = await userRepository.createUser(data);
   return user;
 };
 
@@ -19,6 +20,15 @@ const getById = async (id: string): Promise<UserModel | null> => {
   const userRepository = getCustomRepository(UserRepository);
   const user = await userRepository.getById(id);
   if (!user) return null;
+  return user;
+};
+
+const findByCredentials = async (login: string, password: string): Promise<UserModel | null> => {
+  const userRepository = getCustomRepository(UserRepository);
+  const user = await userRepository.findByCredentials(login);
+  if (!user) return null;
+  const passwordVerification = await bcrypt.compare(password, user.password);
+  if (!passwordVerification) return null;
   return user;
 };
 
@@ -42,4 +52,4 @@ const updateById = async (id: string, data: Omit<UserModel, 'id'>): Promise<User
   return user;
 };
 
-export default { getAll, getById, createUser, deleteById, updateById };
+export default { getAll, getById, findByCredentials, createUser, deleteById, updateById };
