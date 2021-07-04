@@ -1,7 +1,7 @@
 import { getCustomRepository } from 'typeorm';
 import TaskModel from './task.entity';
 
-import { TaskRepository } from './task.memory.repository';
+import { TaskRepository } from './task.repository';
 
 const createTask = async (boardId: string, data: Omit<TaskModel, 'id'>): Promise<TaskModel> => {
   const taskRepository = getCustomRepository(TaskRepository);

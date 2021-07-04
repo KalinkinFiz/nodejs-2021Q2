@@ -2,8 +2,8 @@ import { getCustomRepository } from 'typeorm';
 import bcrypt from 'bcrypt';
 import UserModel from './user.entity';
 
-import { UserRepository } from './user.memory.repository';
-import { TaskRepository } from '../tasks/task.memory.repository';
+import { UserRepository } from './user.repository';
+import { TaskRepository } from '../tasks/task.repository';
 
 const createUser = async (data: Omit<UserModel, 'id'>): Promise<UserModel> => {
   const userRepository = getCustomRepository(UserRepository);

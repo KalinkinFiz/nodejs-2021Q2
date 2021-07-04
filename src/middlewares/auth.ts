@@ -5,7 +5,7 @@ import jwt, { Secret } from 'jsonwebtoken';
 import { getCustomRepository } from 'typeorm';
 import config from '../common/config';
 
-import { UserRepository } from '../resources/users/user.memory.repository';
+import { UserRepository } from '../resources/users/user.repository';
 
 const { JWT_SECRET_KEY } = config;
 

@@ -3,8 +3,8 @@ import { getCustomRepository } from 'typeorm';
 import BoardModel from './board.entity';
 import Column from '../columns/column';
 
-import { BoardRepository } from './board.memory.repository';
-import { TaskRepository } from '../tasks/task.memory.repository';
+import { BoardRepository } from './board.repository';
+import { TaskRepository } from '../tasks/task.repository';
 
 const createBoard = async (data: Omit<BoardModel, 'id'>): Promise<BoardModel> => {
   const boardRepository = getCustomRepository(BoardRepository);
